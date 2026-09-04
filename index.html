@@ -25,15 +25,9 @@
   <a class="wordmark" href="./" aria-label="Grau Games">
     <span class="w-1">GRAU</span><span class="w-2">GAMES</span>
   </a>
-  <p class="tagline">Small games that run in your browser. You click, they start. That's the whole pitch.</p>
 </header>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track" id="tickerTrack"></div>
-</div>
-
 <main>
-  <h2 class="shelf-label">THE SHELF</h2>
   <section class="shelf" id="shelf" aria-label="Games"></section>
 </main>
 
@@ -56,7 +50,6 @@ const GAMES = [
     blurb: "Slice fruit with your bare hands. Your webcam tracks your index finger and turns it into the blade — no mouse, no controller.",
     tags: ["Hand tracking", "Webcam", "Arcade"],
     href: "https://graugames.github.io/grau-ninja/",
-    repo: "https://github.com/graugames/grau-ninja",
     status: "live",
     color: "#ff5c39",
     emoji: "\u{1F349}",
@@ -66,7 +59,6 @@ const GAMES = [
     title: "Grau Battle",
     blurb: "In the workshop. Details land here once it is playable.",
     tags: ["Coming soon"],
-    repo: null,
     status: "soon",
     color: "#5b7cfa",
     emoji: "⚔️",
@@ -96,16 +88,9 @@ document.getElementById("shelf").innerHTML = GAMES.map((g, i) => {
           <ul class="tags">${tags}</ul>
         </span>
       ${close}
-      ${g.repo ? `<a class="repo" href="${g.repo}">SOURCE &rarr;</a>` : ""}
     </article>
   `;
 }).join("");
-
-/* ---- marquee ----
-   Duplicated once so the -50% keyframe loops with no visible seam. */
-const WORDS = ["NO INSTALL", "NO SIGNUP", "NO ADS", "NO LOADING SCREEN", "JUST GAMES"];
-const run = WORDS.map(w => `<span>${w}</span><b aria-hidden="true">&#9670;</b>`).join("");
-document.getElementById("tickerTrack").innerHTML = run + run;
 
 /* ---- cursor blob ----
    Eased toward the pointer each frame so it lags behind rather than
