@@ -85,7 +85,7 @@ a{color:inherit}
 }
 
 /* --------------- shelf --------------- */
-main{position:relative;z-index:1;padding:0 clamp(18px,5vw,40px) 80px}
+main{position:relative;z-index:1;padding:0 clamp(18px,5vw,40px) clamp(64px,10vw,110px)}
 
 .shelf{
   max-width:1060px;
@@ -191,26 +191,6 @@ main{position:relative;z-index:1;padding:0 clamp(18px,5vw,40px) 80px}
   border:2px solid var(--ink);
   background:var(--page);
 }
-
-/* --------------- footer --------------- */
-footer{
-  position:relative;
-  z-index:1;
-  border-top:var(--border);
-  background:var(--ink);
-  color:var(--page);
-  padding:26px 24px 34px;
-  text-align:center;
-  font-size:14px;
-  font-weight:500;
-}
-footer a{
-  color:var(--page);
-  text-decoration:underline;
-  text-decoration-thickness:2px;
-  text-underline-offset:3px;
-}
-footer a:hover{background:var(--page);color:var(--ink)}
 
 /* --------------- keyframes --------------- */
 @keyframes drop{

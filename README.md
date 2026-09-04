@@ -47,8 +47,8 @@ shadows, everything sitting at a slight angle. Hovering a card slides it into
 its own shadow. Keep new additions inside that vocabulary — no gradients on
 chrome, no soft shadows.
 
-The page is also deliberately bare: wordmark, games, footer. No tagline, no
-section heading, no marquee, no per-card source button — the games are the
+The page is also deliberately bare: wordmark, then games. No tagline, no section
+heading, no marquee, no per-card source button, no footer — the games are the
 content. Resist adding chrome back.
 
 Every animation is disabled under `prefers-reduced-motion`, and the cursor blob
