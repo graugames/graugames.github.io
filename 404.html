@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Not Found — Grau Games</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#ffd400" />
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='26' y='26' width='62' height='62'/><rect x='12' y='12' width='62' height='62' fill='%23ffd400' stroke='%23000' stroke-width='9'/></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+<style>
+  .lost{
+    position:relative; z-index:1;
+    min-height:100dvh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:clamp(26px,4vw,40px);
+    padding:40px clamp(18px,5vw,40px) 80px;
+    text-align:center;
+  }
+  .code{
+    /* a 1em margin on a 140px glyph is a 140px hole, so zero it */
+    margin:0;
+    font-family:var(--display);
+    font-size:clamp(84px,26vw,240px);
+    line-height:.86;
+    letter-spacing:-.05em;
+    color:var(--card);
+    -webkit-text-stroke:5px var(--ink);
+    paint-order:stroke fill;
+    animation:drop .55s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  .say{
+    max-width:30ch;
+    margin:0;
+    font-size:clamp(16px,2.6vw,20px);
+    font-weight:500;
+    line-height:1.5;
+  }
+  .home{
+    font-family:var(--display);
+    font-size:clamp(13px,2vw,16px);
+    letter-spacing:.08em;
+    text-decoration:none;
+    padding:15px 24px;
+    border:var(--border);
+    background:var(--card);
+    box-shadow:var(--shadow);
+    transform:rotate(-1.5deg);
+    transition:transform .18s cubic-bezier(.3,1.2,.5,1), box-shadow .18s ease;
+  }
+  .home:hover,.home:focus-visible{
+    transform:rotate(0deg) translate(6px,6px);
+    box-shadow:var(--shadow-press);
+    background:var(--page);
+    outline:none;
+  }
+  .home:focus-visible{ outline:5px solid #1d4ed8; outline-offset:6px }
+  .home:active{ transform:rotate(0deg) translate(9px,9px); box-shadow:0 0 0 var(--ink) }
+</style>
+</head>
+<body>
+
+<div class="blob" id="blob" hidden aria-hidden="true"></div>
+
+<main class="lost">
+  <p class="code">404</p>
+  <p class="say">No game lives at this address. It was either never here, or it moved.</p>
+  <a class="home" href="/">BACK TO THE GAMES</a>
+</main>
+
+<script type="module">
+  /* Same trailing blob as the shelf, minus everything it does not need. */
+  if (matchMedia("(pointer: fine)").matches &&
+      !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const blob = document.getElementById("blob");
+    let tx = innerWidth / 2, ty = innerHeight / 2, x = tx, y = ty;
+    addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
+    (function frame() {
+      x += (tx - x) * 0.06;
+      y += (ty - y) * 0.06;
+      blob.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      requestAnimationFrame(frame);
+    })();
+    blob.hidden = false;
+  }
+</script>
+
+</body>
+</html>

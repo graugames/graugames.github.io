@@ -6,7 +6,8 @@
 <title>Grau Games</title>
 <meta name="description" content="Small browser games you can play instantly. No install, no signup, no ads." />
 <meta name="theme-color" content="#ffd400" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23ffd400' stroke='%23000' stroke-width='10'/><path d='M24 74V26h14l12 22 12-22h14v48H62V46L50 68 38 46v28z'/></svg>" />
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='26' y='26' width='62' height='62'/><rect x='12' y='12' width='62' height='62' fill='%23ffd400' stroke='%23000' stroke-width='9'/></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -31,78 +32,7 @@
   <section class="shelf" id="shelf" aria-label="Games"></section>
 </main>
 
-<script>
-/* ---------------------------------------------------------------
-   The shelf is this list. To add a game: append one entry, push.
-   `status` is "live" once its Pages build is up, "soon" until then.
-   `color` is the flat block colour behind the cover art.
-   --------------------------------------------------------------- */
-const GAMES = [
-  {
-    title: "GrauNinja",
-    blurb: "Slice fruit with your bare hands. Your webcam tracks your index finger and turns it into the blade — no mouse, no controller.",
-    tags: ["Hand tracking", "Webcam", "Arcade"],
-    href: "https://graugames.github.io/grau-ninja/",
-    status: "live",
-    color: "#ff5c39",
-    emoji: "\u{1F349}",
-    tilt: -1.6
-  },
-  {
-    title: "Grau Battle",
-    blurb: "In the workshop. Details land here once it is playable.",
-    tags: ["Coming soon"],
-    status: "soon",
-    color: "#5b7cfa",
-    emoji: "⚔️",
-    tilt: 1.4
-  }
-];
-
-/* ---- shelf ---- */
-document.getElementById("shelf").innerHTML = GAMES.map((g, i) => {
-  const live = g.status === "live";
-  const tags = g.tags.map(t => `<li>${t}</li>`).join("");
-  // A live card is one big link; a "soon" card is inert, so it is a plain div.
-  const open  = live ? `<a class="card" href="${g.href}">` : `<div class="card is-soon">`;
-  const close = live ? `</a>` : `</div>`;
-  return `
-    <article class="slot" style="--tilt:${g.tilt}deg;--i:${i}">
-      ${open}
-        <span class="art" style="--art:${g.color}" aria-hidden="true">
-          <span class="art-emoji">${g.emoji}</span>
-        </span>
-        <span class="body">
-          <span class="title-row">
-            <h3>${g.title}</h3>
-            <span class="badge${live ? "" : " badge-soon"}">${live ? "PLAY" : "SOON"}</span>
-          </span>
-          <p>${g.blurb}</p>
-          <ul class="tags">${tags}</ul>
-        </span>
-      ${close}
-    </article>
-  `;
-}).join("");
-
-/* ---- cursor blob ----
-   Eased toward the pointer each frame so it lags behind rather than
-   snapping to it. Skipped entirely for reduced-motion and touch. */
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const fine = matchMedia("(pointer: fine)").matches;
-if (!reduced && fine) {
-  const blob = document.getElementById("blob");
-  let tx = innerWidth / 2, ty = innerHeight / 3, x = tx, y = ty;
-  addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
-  (function frame() {
-    x += (tx - x) * 0.06;
-    y += (ty - y) * 0.06;
-    blob.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(frame);
-  })();
-  blob.hidden = false;
-}
-</script>
+<script type="module" src="./main.js"></script>
 
 </body>
 </html>

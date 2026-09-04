@@ -1,32 +1,43 @@
 /* ===============================================================
    Grau Games — neobrutalist shelf.
-   House rules: flat saturated colour, 4px black outlines, hard
-   offset shadows (never blurred), slight rotation, no gradients.
+
+   House rules: flat saturated colour, black outlines, hard
+   *unblurred* offset shadows, everything sitting at a slight angle.
+   No gradients on chrome, no soft shadows, no rounded corners.
+
+   The page is deliberately bare — wordmark, then games. Chrome that
+   sits between a visitor and a game does not belong here.
    =============================================================== */
 
 :root{
   --ink:#000;
   --page:#ffd400;
   --card:#fffdf5;
-  --shadow:8px 8px 0 var(--ink);
-  --shadow-sm:5px 5px 0 var(--ink);
-  --border:4px solid var(--ink);
+
+  --bd:4px;
+  --shadow:9px 9px 0 var(--ink);
+  --shadow-press:2px 2px 0 var(--ink);
+  --border:var(--bd) solid var(--ink);
+
   --display:"Archivo Black", Impact, "Arial Black", sans-serif;
   --body:"Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;overflow-x:clip}
-/* cards sit at an angle and can overhang their column; clip that rather
-   than letting it create a horizontal scrollbar */
+html{
+  -webkit-text-size-adjust:100%;
+  /* cards sit at an angle and can overhang their column; clip that rather
+     than letting it create a horizontal scrollbar */
+  overflow-x:clip;
+}
 
 body{
   margin:0;
-  min-height:100%;
+  min-height:100dvh;
   font-family:var(--body);
   color:var(--ink);
   background-color:var(--page);
-  /* faint graph paper, drawn with gradients so there is no image request */
+  /* graph paper, drawn with gradients so there is no image request */
   background-image:
     linear-gradient(rgba(0,0,0,.07) 2px, transparent 2px),
     linear-gradient(90deg, rgba(0,0,0,.07) 2px, transparent 2px);
@@ -38,13 +49,13 @@ a{color:inherit}
 /* --------------- cursor blob --------------- */
 .blob{
   position:fixed;
-  top:0;left:0;
-  width:min(46vw,460px);
+  top:0; left:0;
+  width:min(48vw,520px);
   aspect-ratio:1;
   border-radius:50%;
   background:#ff5c39;
-  opacity:.45;
-  filter:blur(70px);
+  opacity:.42;
+  filter:blur(80px);
   pointer-events:none;
   z-index:0;
   will-change:transform;
@@ -55,7 +66,7 @@ a{color:inherit}
 .hero{
   position:relative;
   z-index:1;
-  padding:clamp(48px,9vw,96px) 24px clamp(44px,7vw,72px);
+  padding:clamp(44px,8vw,92px) clamp(18px,5vw,40px) clamp(40px,7vw,72px);
   text-align:center;
 }
 
@@ -63,10 +74,12 @@ a{color:inherit}
   display:inline-block;
   text-decoration:none;
   font-family:var(--display);
-  font-size:clamp(38px,10.5vw,104px);
+  /* tracks the viewport so the word fills the line at every width
+     instead of stranding margins on desktop */
+  font-size:clamp(40px,12.5vw,124px);
   line-height:.9;
-  letter-spacing:-.02em;
-  padding:.18em .3em;
+  letter-spacing:-.03em;
+  padding:.16em .26em .2em;
   border:var(--border);
   background:var(--card);
   box-shadow:var(--shadow);
@@ -74,10 +87,9 @@ a{color:inherit}
   animation:drop .55s cubic-bezier(.2,1.4,.4,1) both;
 }
 .wordmark:hover,
-.wordmark:focus-visible{
-  animation:wobble .5s ease-in-out;
-  outline:none;
-}
+.wordmark:focus-visible{ animation:wobble .5s ease-in-out; outline:none }
+.wordmark:active{ transform:rotate(-2deg) translate(5px,5px); box-shadow:var(--shadow-press) }
+
 .w-2{
   color:var(--card);
   -webkit-text-stroke:3px var(--ink);
@@ -85,23 +97,29 @@ a{color:inherit}
 }
 
 /* --------------- shelf --------------- */
-main{position:relative;z-index:1;padding:0 clamp(18px,5vw,40px) clamp(64px,10vw,110px)}
+main{
+  position:relative;
+  z-index:1;
+  padding:0 clamp(18px,5vw,40px) clamp(64px,10vw,120px);
+}
 
 .shelf{
-  max-width:1060px;
+  max-width:1120px;
   margin:0 auto;
   display:grid;
-  gap:clamp(26px,4vw,40px);
-  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+  gap:clamp(30px,4.5vw,48px);
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
 }
 
 .slot{
   display:flex;
-  /* each card deals itself in slightly after the one before it */
-  animation:deal .5s calc(.26s + var(--i) * .09s) cubic-bezier(.2,1.3,.4,1) both;
+  /* each card deals itself in just after the one before it */
+  animation:deal .55s calc(.2s + var(--i) * .1s) cubic-bezier(.2,1.3,.4,1) both;
 }
 
+/* --------------- card --------------- */
 .card{
+  --px:0; --py:0;              /* cursor position, written by main.js */
   display:flex;
   flex-direction:column;
   width:100%;
@@ -110,47 +128,78 @@ main{position:relative;z-index:1;padding:0 clamp(18px,5vw,40px) clamp(64px,10vw,
   background:var(--card);
   box-shadow:var(--shadow);
   transform:rotate(var(--tilt));
-  transition:transform .16s cubic-bezier(.3,1.2,.5,1), box-shadow .16s ease;
+  transition:transform .18s cubic-bezier(.3,1.2,.5,1), box-shadow .18s ease;
 }
-/* the classic press: card slides into its own shadow */
-.card:hover,
+
+/* The neobrutalist press: the card slides into its own shadow. Only cards
+   that actually go somewhere get it — pressing under the cursor is a
+   clickability promise, and an unfinished game cannot keep it. */
+.card:not(.is-soon):hover,
 .card:focus-visible{
   transform:rotate(0deg) translate(6px,6px);
-  box-shadow:2px 2px 0 var(--ink);
-  outline:none;
+  box-shadow:var(--shadow-press);
 }
-.card.is-soon{
-  cursor:default;
-  background:repeating-linear-gradient(
-    45deg,
-    var(--card) 0 12px,
-    #efe9d8 12px 24px
-  );
-}
+.card:focus-visible{ outline:5px solid #1d4ed8; outline-offset:6px }
+.card:not(.is-soon):active{ transform:rotate(0deg) translate(9px,9px); box-shadow:0 0 0 var(--ink) }
 
-/* cover art */
+/* sits further back on the shelf, and never behaves like a button */
+.card.is-soon{ cursor:default; box-shadow:5px 5px 0 var(--ink) }
+
+/* --------------- cover art --------------- */
 .art{
-  display:grid;
-  place-items:center;
+  position:relative;
+  display:block;
   aspect-ratio:16/10;
-  background:var(--art);
+  overflow:hidden;
   border-bottom:var(--border);
+  background:var(--ink);
 }
-.art-emoji{
-  font-size:clamp(48px,9vw,68px);
-  line-height:1;
-  animation:bob 3.4s ease-in-out infinite;
+.art-svg{ display:block; width:100%; height:100%; }
+
+/* Depth: layers translate by different amounts against the cursor,
+   so the cover art gains parallax without a library. */
+.l-back,.l-mid,.l-fg{
+  transition:transform .35s cubic-bezier(.2,.9,.3,1);
 }
-.card:hover .art-emoji{animation-duration:.9s}
+.card:hover .l-back{ transform:translate(calc(var(--px) * -7px), calc(var(--py) * -7px)) }
+.card:hover .l-mid { transform:translate(calc(var(--px) * 15px), calc(var(--py) * 15px)) }
+.card:hover .l-fg  { transform:translate(calc(var(--px) * 26px), calc(var(--py) * 26px)) }
 
-.body{display:block;padding:18px 18px 20px}
+/* A CSS transform on an SVG element replaces its transform attribute
+   outright, so each of these has to restate its resting position in full
+   or hovering would snap it to the origin. */
+.melon-a,.melon-b,.sword-a,.sword-b{
+  transition:transform .4s cubic-bezier(.2,1.2,.4,1);
+}
 
-.title-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+/* GrauNinja: the halves sit either side of the blade, one above and one
+   below. Hovering pushes them apart along the cut, finishing the slice. */
+.melon-a{ transform:translate(96px,56px)   rotate(-28deg) }
+.melon-b{ transform:translate(232px,152px) rotate(152deg) }
+.card:hover .melon-a{ transform:translate(80px,40px)   rotate(-38deg) }
+.card:hover .melon-b{ transform:translate(248px,168px) rotate(162deg) }
+
+/* The blade sits drawn at rest and re-wipes on hover. Both strokes get the
+   dash treatment together — animating only the white one would leave its
+   black outline standing there as a bar. */
+.slash{ stroke-dasharray:430; stroke-dashoffset:0 }
+.card:hover .slash{ animation:wipe .5s cubic-bezier(.3,.8,.3,1) }
+
+/* Grau Battle: the swords clash */
+.sword-a{ transform:translate(160px,100px) rotate(-36deg) }
+.sword-b{ transform:translate(160px,100px) rotate(36deg) }
+.card:hover .sword-a{ transform:translate(160px,100px) rotate(-44deg) }
+.card:hover .sword-b{ transform:translate(160px,100px) rotate(44deg) }
+
+/* --------------- card body --------------- */
+.body{ display:block; padding:20px 20px 22px }
+
+.title-row{ display:flex; align-items:center; justify-content:space-between; gap:12px }
 .title-row h3{
   margin:0;
   font-family:var(--display);
-  font-size:clamp(19px,2.6vw,23px);
-  letter-spacing:-.01em;
+  font-size:clamp(20px,2.7vw,25px);
+  letter-spacing:-.015em;
 }
 
 .badge{
@@ -158,68 +207,77 @@ main{position:relative;z-index:1;padding:0 clamp(18px,5vw,40px) clamp(64px,10vw,
   font-family:var(--display);
   font-size:11px;
   letter-spacing:.1em;
-  padding:6px 10px;
+  padding:7px 11px;
   border:3px solid var(--ink);
   background:#3ddc84;
   box-shadow:3px 3px 0 var(--ink);
+  transition:transform .18s cubic-bezier(.3,1.4,.5,1), box-shadow .18s ease;
 }
-.badge-soon{
-  background:var(--card);
-  animation:blink 1.7s steps(1,end) infinite;
-}
+.card:not(.is-soon):hover .badge{ transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--ink) }
+.badge-soon{ background:var(--card); animation:blink 1.8s steps(1,end) infinite }
+.card:hover .badge-soon{ transform:none; box-shadow:3px 3px 0 var(--ink) }
 
-.body p{
-  margin:12px 0 0;
-  font-size:14.5px;
-  line-height:1.5;
-}
+.body p{ margin:13px 0 0; font-size:15px; line-height:1.5 }
 
 .tags{
   list-style:none;
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin:16px 0 0;
-  padding:0;
+  display:flex; flex-wrap:wrap; gap:7px;
+  margin:17px 0 0; padding:0;
 }
 .tags li{
   font-size:11.5px;
   font-weight:700;
   letter-spacing:.05em;
   text-transform:uppercase;
-  padding:4px 9px;
+  padding:5px 9px;
   border:2px solid var(--ink);
   background:var(--page);
 }
 
 /* --------------- keyframes --------------- */
 @keyframes drop{
-  from{opacity:0;transform:rotate(-2deg) translateY(-34px) scale(.94)}
-  to  {opacity:1;transform:rotate(-2deg) translateY(0) scale(1)}
+  from{ opacity:0; transform:rotate(-2deg) translateY(-36px) scale(.94) }
+  to  { opacity:1; transform:rotate(-2deg) translateY(0) scale(1) }
 }
 @keyframes deal{
-  from{opacity:0;transform:translateY(26px) rotate(calc(var(--tilt) * 3))}
-  to  {opacity:1;transform:none}
+  from{ opacity:0; transform:translateY(30px) rotate(calc(var(--tilt) * 3)) }
+  to  { opacity:1; transform:none }
 }
 @keyframes wobble{
-  0%,100%{transform:rotate(-2deg)}
-  30%    {transform:rotate(1.5deg) scale(1.02)}
-  65%    {transform:rotate(-3.5deg)}
+  0%,100%{ transform:rotate(-2deg) }
+  30%    { transform:rotate(1.5deg) scale(1.02) }
+  65%    { transform:rotate(-3.5deg) }
 }
-@keyframes bob{
-  0%,100%{transform:translateY(0) rotate(-4deg)}
-  50%    {transform:translateY(-9px) rotate(4deg)}
-}
+@keyframes wipe{ from{ stroke-dashoffset:430 } to{ stroke-dashoffset:0 } }
 @keyframes blink{
-  0%,60% {background:var(--card)}
-  61%,100%{background:#ffe680}
+  0%,60%  { background:var(--card) }
+  61%,100%{ background:#ffe680 }
 }
 
+/* --------------- narrow screens --------------- */
+@media (max-width:560px){
+  /* one column, and the tilt reads as a mistake at this width */
+  .shelf{ grid-template-columns:1fr; gap:26px }
+  .card{ transform:none }
+  .body{ padding:17px 16px 19px }
+  .wordmark{ letter-spacing:-.04em }
+}
+
+/* --------------- reduced motion ---------------
+   Kill every idle and entrance animation, and freeze the parallax.
+   The press on hover stays: it is feedback, not decoration. */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{
     animation-duration:.01ms !important;
     animation-iteration-count:1 !important;
     transition-duration:.01ms !important;
   }
-  .card:hover,.card:focus-visible{transform:rotate(var(--tilt))}
+  .card:hover .l-back,
+  .card:hover .l-mid,
+  .card:hover .l-fg{ transform:none }
+  .card:hover .melon-a{ transform:translate(96px,56px)   rotate(-28deg) }
+  .card:hover .melon-b{ transform:translate(232px,152px) rotate(152deg) }
+  .card:hover .sword-a{ transform:translate(160px,100px) rotate(-36deg) }
+  .card:hover .sword-b{ transform:translate(160px,100px) rotate(36deg) }
+  .slash{ stroke-dashoffset:0 }
 }
