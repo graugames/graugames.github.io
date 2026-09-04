@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Grau Games</title>
+<meta name="description" content="Small browser games you can play instantly — no install, no signup, no ads." />
+<meta name="theme-color" content="#180d05" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23180d05'/><path d='M27 70V34h13l10 18 10-18h13v36H60V50l-10 17-10-17v20z' fill='%23f0b429'/></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<meta property="og:title" content="Grau Games" />
+<meta property="og:description" content="Small browser games you can play instantly — no install, no signup, no ads." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1 class="wordmark"><span class="w-grau">GRAU</span><span class="w-games">GAMES</span></h1>
+    <p class="tagline">Small browser games. Click and play — no install, no signup, no ads.</p>
+  </div>
+</header>
+
+<main>
+  <section class="shelf" id="shelf" aria-label="Games">
+    <!-- cards are rendered from the GAMES list below -->
+  </section>
+</main>
+
+<footer>
+  <p>Built by <a href="https://github.com/sigmaAPALEKAR">Abir Palekar</a>.
+     Source for every game lives on <a href="https://github.com/graugames">GitHub</a>.</p>
+</footer>
+
+<script>
+/* ---------------------------------------------------------------
+   The whole site is this list. To add a game: append one entry,
+   commit, push. Set `status` to "live" once its Pages build is up,
+   "soon" while it is still in the workshop.
+   --------------------------------------------------------------- */
+const GAMES = [
+  {
+    slug: "grau-ninja",
+    title: "GrauNinja",
+    blurb: "Slice fruit with your bare hands. Your webcam tracks your index finger and turns it into the blade.",
+    tags: ["Hand tracking", "Webcam", "Arcade"],
+    href: "https://graugames.github.io/grau-ninja/",
+    repo: "https://github.com/graugames/grau-ninja",
+    status: "live",
+    art: { bg: "#2b1a0e", glow: "#e2402f", emoji: "\u{1F349}" }
+  },
+  {
+    slug: "next",
+    title: "Something next",
+    blurb: "There is room on the shelf. The next game goes here.",
+    tags: ["In the workshop"],
+    status: "soon",
+    art: { bg: "#1d2432", glow: "#5b7cfa", emoji: "\u{1F6E0}" }
+  }
+];
+
+const shelf = document.getElementById("shelf");
+
+shelf.innerHTML = GAMES.map(g => {
+  const live = g.status === "live";
+  const tags = g.tags.map(t => `<li>${t}</li>`).join("");
+  // A live card is one big link; a "soon" card is inert, so it gets a div.
+  const open  = live ? `<a class="card" href="${g.href}">` : `<div class="card is-soon">`;
+  const close = live ? `</a>` : `</div>`;
+  return `
+    <article class="slot">
+      ${open}
+        <span class="art" style="--bg:${g.art.bg};--glow:${g.art.glow}" aria-hidden="true">
+          <span class="art-emoji">${g.art.emoji}</span>
+        </span>
+        <span class="body">
+          <span class="title-row">
+            <h2>${g.title}</h2>
+            <span class="badge${live ? "" : " badge-soon"}">${live ? "Play" : "Soon"}</span>
+          </span>
+          <p>${g.blurb}</p>
+          <ul class="tags">${tags}</ul>
+        </span>
+      ${close}
+      ${g.repo ? `<a class="repo" href="${g.repo}">source on GitHub &rarr;</a>` : ""}
+    </article>
+  `;
+}).join("");
+</script>
+
+</body>
+</html>
