@@ -22,21 +22,35 @@ graugames.github.io/grau-ninja/ <- repo: graugames/grau-ninja
 
    ```js
    {
-     slug:  "repo-name",
      title: "Display Name",
      blurb: "One sentence on what the player actually does.",
      tags:  ["Genre", "Notable thing"],
      href:  "https://graugames.github.io/repo-name/",
      repo:  "https://github.com/graugames/repo-name",
-     status: "live",                                  // or "soon"
-     art: { bg: "#2b1a0e", glow: "#e2402f", emoji: "🍉" }
+     status: "live",     // or "soon"
+     color: "#ff5c39",   // flat block colour behind the cover art
+     emoji: "🍉",
+     tilt:  -1.6         // degrees the card sits at on the shelf
    }
    ```
 
 4. Commit and push. There is no build step — Pages serves these files as-is.
 
-`status: "soon"` renders a dimmed, unclickable card, which is the way to put a
-game on the shelf before it is ready to play.
+`status: "soon"` renders a hatched, unclickable card with a blinking SOON
+badge — the way to put a game on the shelf before it is ready to play. Leave
+`href` off entirely for those, and set `repo: null` if the source is not public
+yet.
+
+## Look and feel
+
+Neobrutalist, and deliberately unrelated to any individual game's art
+direction: flat saturated colour, 4px black outlines, hard *unblurred* offset
+shadows, everything sitting at a slight angle. Hovering a card slides it into
+its own shadow. Keep new additions inside that vocabulary — no gradients on
+chrome, no soft shadows.
+
+Every animation is disabled under `prefers-reduced-motion`, and the cursor blob
+also turns itself off on touch devices. Preserve both when editing.
 
 ## Local preview
 

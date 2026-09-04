@@ -4,92 +4,126 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Grau Games</title>
-<meta name="description" content="Small browser games you can play instantly — no install, no signup, no ads." />
-<meta name="theme-color" content="#180d05" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23180d05'/><path d='M27 70V34h13l10 18 10-18h13v36H60V50l-10 17-10-17v20z' fill='%23f0b429'/></svg>" />
+<meta name="description" content="Small browser games you can play instantly. No install, no signup, no ads." />
+<meta name="theme-color" content="#ffd400" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23ffd400' stroke='%23000' stroke-width='10'/><path d='M24 74V26h14l12 22 12-22h14v48H62V46L50 68 38 46v28z'/></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
 <meta property="og:title" content="Grau Games" />
-<meta property="og:description" content="Small browser games you can play instantly — no install, no signup, no ads." />
+<meta property="og:description" content="Small browser games you can play instantly. No install, no signup, no ads." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
 
+<!-- the blob chases the cursor behind everything -->
+<div class="blob" id="blob" hidden aria-hidden="true"></div>
+
 <header class="hero">
-  <div class="hero-inner">
-    <h1 class="wordmark"><span class="w-grau">GRAU</span><span class="w-games">GAMES</span></h1>
-    <p class="tagline">Small browser games. Click and play — no install, no signup, no ads.</p>
-  </div>
+  <a class="wordmark" href="./" aria-label="Grau Games">
+    <span class="w-1">GRAU</span><span class="w-2">GAMES</span>
+  </a>
+  <p class="tagline">Small games that run in your browser. You click, they start. That's the whole pitch.</p>
 </header>
 
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
 <main>
-  <section class="shelf" id="shelf" aria-label="Games">
-    <!-- cards are rendered from the GAMES list below -->
-  </section>
+  <h2 class="shelf-label">THE SHELF</h2>
+  <section class="shelf" id="shelf" aria-label="Games"></section>
 </main>
 
 <footer>
-  <p>Built by <a href="https://github.com/sigmaAPALEKAR">Abir Palekar</a>.
-     Source for every game lives on <a href="https://github.com/graugames">GitHub</a>.</p>
+  <p>
+    Made by <a href="https://github.com/sigmaAPALEKAR">Abir Palekar</a> &middot;
+    every game is open source on <a href="https://github.com/graugames">GitHub</a>
+  </p>
 </footer>
 
 <script>
 /* ---------------------------------------------------------------
-   The whole site is this list. To add a game: append one entry,
-   commit, push. Set `status` to "live" once its Pages build is up,
-   "soon" while it is still in the workshop.
+   The shelf is this list. To add a game: append one entry, push.
+   `status` is "live" once its Pages build is up, "soon" until then.
+   `color` is the flat block colour behind the cover art.
    --------------------------------------------------------------- */
 const GAMES = [
   {
-    slug: "grau-ninja",
     title: "GrauNinja",
-    blurb: "Slice fruit with your bare hands. Your webcam tracks your index finger and turns it into the blade.",
+    blurb: "Slice fruit with your bare hands. Your webcam tracks your index finger and turns it into the blade — no mouse, no controller.",
     tags: ["Hand tracking", "Webcam", "Arcade"],
     href: "https://graugames.github.io/grau-ninja/",
     repo: "https://github.com/graugames/grau-ninja",
     status: "live",
-    art: { bg: "#2b1a0e", glow: "#e2402f", emoji: "\u{1F349}" }
+    color: "#ff5c39",
+    emoji: "\u{1F349}",
+    tilt: -1.6
   },
   {
-    slug: "next",
-    title: "Something next",
-    blurb: "There is room on the shelf. The next game goes here.",
-    tags: ["In the workshop"],
+    title: "Grau Battle",
+    blurb: "In the workshop. Details land here once it is playable.",
+    tags: ["Coming soon"],
+    repo: null,
     status: "soon",
-    art: { bg: "#1d2432", glow: "#5b7cfa", emoji: "\u{1F6E0}" }
+    color: "#5b7cfa",
+    emoji: "⚔️",
+    tilt: 1.4
   }
 ];
 
-const shelf = document.getElementById("shelf");
-
-shelf.innerHTML = GAMES.map(g => {
+/* ---- shelf ---- */
+document.getElementById("shelf").innerHTML = GAMES.map((g, i) => {
   const live = g.status === "live";
   const tags = g.tags.map(t => `<li>${t}</li>`).join("");
-  // A live card is one big link; a "soon" card is inert, so it gets a div.
+  // A live card is one big link; a "soon" card is inert, so it is a plain div.
   const open  = live ? `<a class="card" href="${g.href}">` : `<div class="card is-soon">`;
   const close = live ? `</a>` : `</div>`;
   return `
-    <article class="slot">
+    <article class="slot" style="--tilt:${g.tilt}deg;--i:${i}">
       ${open}
-        <span class="art" style="--bg:${g.art.bg};--glow:${g.art.glow}" aria-hidden="true">
-          <span class="art-emoji">${g.art.emoji}</span>
+        <span class="art" style="--art:${g.color}" aria-hidden="true">
+          <span class="art-emoji">${g.emoji}</span>
         </span>
         <span class="body">
           <span class="title-row">
-            <h2>${g.title}</h2>
-            <span class="badge${live ? "" : " badge-soon"}">${live ? "Play" : "Soon"}</span>
+            <h3>${g.title}</h3>
+            <span class="badge${live ? "" : " badge-soon"}">${live ? "PLAY" : "SOON"}</span>
           </span>
           <p>${g.blurb}</p>
           <ul class="tags">${tags}</ul>
         </span>
       ${close}
-      ${g.repo ? `<a class="repo" href="${g.repo}">source on GitHub &rarr;</a>` : ""}
+      ${g.repo ? `<a class="repo" href="${g.repo}">SOURCE &rarr;</a>` : ""}
     </article>
   `;
 }).join("");
+
+/* ---- marquee ----
+   Duplicated once so the -50% keyframe loops with no visible seam. */
+const WORDS = ["NO INSTALL", "NO SIGNUP", "NO ADS", "NO LOADING SCREEN", "JUST GAMES"];
+const run = WORDS.map(w => `<span>${w}</span><b aria-hidden="true">&#9670;</b>`).join("");
+document.getElementById("tickerTrack").innerHTML = run + run;
+
+/* ---- cursor blob ----
+   Eased toward the pointer each frame so it lags behind rather than
+   snapping to it. Skipped entirely for reduced-motion and touch. */
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fine = matchMedia("(pointer: fine)").matches;
+if (!reduced && fine) {
+  const blob = document.getElementById("blob");
+  let tx = innerWidth / 2, ty = innerHeight / 3, x = tx, y = ty;
+  addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
+  (function frame() {
+    x += (tx - x) * 0.06;
+    y += (ty - y) * 0.06;
+    blob.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    requestAnimationFrame(frame);
+  })();
+  blob.hidden = false;
+}
 </script>
 
 </body>
