@@ -35,7 +35,6 @@ function bands(fill, count, width, gap, angle) {
    a separate visual alarm. Paper, stone and ink do the rest of the work. */
 const ACCENT = "#b6674f";
 const PAPER = "#e3ddd1";
-const STONE = "#929690";
 
 /* Half a watermelon, flat side up, centred on its own origin. Rind, pith
    and flesh are separate rings so the cut face reads as a cut face. */
@@ -48,12 +47,8 @@ const MELON = `
     <circle cx="21" cy="9" r="3.6"/><circle cx="-3" cy="30" r="3.6"/>
   </g>`;
 
-const SWORD = `
-  <path d="M-10-66 L0-84 L10-66 L10 6 L-10 6Z" fill="#d9d5cd" stroke="#000" stroke-width="6" stroke-linejoin="round"/>
-  <path d="M0-76 L0 2" stroke="#000" stroke-width="3" opacity=".3"/>
-  <rect x="-31" y="5" width="62" height="15" rx="3" fill="${ACCENT}" stroke="#000" stroke-width="6"/>
-  <rect x="-9" y="20" width="18" height="35" fill="#765f50" stroke="#000" stroke-width="6"/>
-  <circle cx="0" cy="61" r="11" fill="${ACCENT}" stroke="#000" stroke-width="6"/>`;
+const GLOVE = `
+  <path d="M-28 20 L-26-28 Q-25-42-14-42 Q-6-42-6-30 L-5-12 L1-48 Q3-59 12-57 Q20-55 18-44 L13-13 L20-39 Q23-49 31-45 Q38-42 35-31 L26 13 Q22 32 5 38 L-10 41 Q-24 40-28 20Z" fill="#58e7ff" stroke="#000" stroke-width="6" stroke-linejoin="round"/>`;
 
 export const GAMES = [
   {
@@ -84,9 +79,9 @@ export const GAMES = [
   },
   {
     slug: "graufence",
-    title: "GrauFence",
-    blurb: "Duel with a virtual blade. Your webcam tracks your stance and sword hand, or switch to keyboard controls for a fast practice round.",
-    tags: ["Pose tracking", "1v1", "Webcam"],
+    title: "Grau Battle",
+    blurb: "Box in a low-poly arena. Throw punches with your gloves, block the incoming line, and slip with your hips — webcam or keyboard.",
+    tags: ["Boxing", "Pose tracking", "1v1"],
     href: "https://graugames.github.io/graufence/",
     status: "live",
     tilt: 1.1,
@@ -97,34 +92,13 @@ export const GAMES = [
         ${burst(160, 100, 112, 78, 12, 'fill="#d1c8b7" stroke="#000" stroke-width="5"')}
       </g>
       <g class="l-mid">
-        <g class="sword-a">${SWORD}</g>
-        <g class="sword-b">${SWORD}</g>
+        <g transform="translate(118 112) rotate(-22)">${GLOVE}</g>
+        <g transform="translate(204 91) rotate(18) scale(.92)">${GLOVE.replaceAll('#58e7ff', '#ff5cc8')}</g>
       </g>
       <g class="l-fg" fill="${PAPER}" stroke="#000" stroke-width="4">
         <path d="M18 164 L112 122" stroke="#000" stroke-width="13" stroke-linecap="round"/>
         <path d="M18 164 L112 122" stroke="${PAPER}" stroke-width="6" stroke-linecap="round"/>
         <circle cx="58" cy="44" r="8"/><circle cx="270" cy="158" r="10"/><circle cx="258" cy="38" r="5"/>
-      </g>`
-  },
-  {
-    slug: "grau-battle",
-    title: "Grau Battle",
-    blurb: "In the workshop. Details land here once it is playable.",
-    tags: ["Coming soon"],
-    status: "soon",
-    tilt: 1.4,
-    art: `
-      <rect width="320" height="200" fill="${STONE}"/>
-      <g class="l-back">
-        ${burst(160, 100, 120, 74, 16, `fill="${PAPER}" stroke="#000" stroke-width="5"`)}
-        ${burst(160, 100, 72, 45, 16, `fill="${ACCENT}" stroke="#000" stroke-width="5"`)}
-      </g>
-      <g class="l-mid">
-        <g class="sword-a">${SWORD}</g>
-        <g class="sword-b">${SWORD}</g>
-      </g>
-      <g class="l-fg" fill="${PAPER}" stroke="#000" stroke-width="4">
-        <circle cx="52" cy="38" r="8"/><circle cx="272" cy="156" r="10"/><circle cx="262" cy="42" r="6"/>
       </g>`
   }
 ];
