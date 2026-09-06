@@ -10,7 +10,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='26' y='26' width='62' height='62'/><rect x='12' y='12' width='62' height='62' fill='%23ffd400' stroke='%23000' stroke-width='9'/></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <meta property="og:title" content="Grau Games" />
 <meta property="og:description" content="Small browser games you can play instantly. No install, no signup, no ads." />
 <meta property="og:type" content="website" />
@@ -24,18 +24,56 @@
 </head>
 <body>
 
-<!-- the blob chases the cursor behind everything -->
+<!-- the signal chases the cursor behind everything -->
 <div class="blob" id="blob" hidden aria-hidden="true"></div>
 
-<header class="hero">
+<header class="site-header">
   <a class="wordmark" href="./" aria-label="Grau Games">
     <span class="w-1">GRAU</span><span class="w-2">GAMES</span>
   </a>
+  <div class="header-meta" aria-label="Grau Games status">
+    <span class="header-id">GG / 001</span>
+    <span class="status"><i aria-hidden="true"></i> SHELF ONLINE</span>
+  </div>
 </header>
 
 <main>
-  <section class="shelf" id="shelf" aria-label="Games"></section>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow"><span>01</span> DIGITAL ARCADE / EST. 2025</p>
+      <h1 id="hero-title">Small games.<br /><em>Big energy.</em></h1>
+      <p class="hero-deck">A hand-picked shelf of browser games built for the exact moment you want to play something strange.</p>
+      <a class="jump" href="#shelf"><span class="jump-mark" aria-hidden="true">↓</span><span>CHOOSE YOUR MOVE</span><span aria-hidden="true">↘</span></a>
+    </div>
+
+    <div class="hero-poster" aria-hidden="true">
+      <div class="poster-frame">
+        <span class="poster-top">NO DOWNLOADS / NO SIGNUP</span>
+        <span class="poster-glyph">GG</span>
+        <span class="poster-bottom">THE INTERNET ARCADE</span>
+        <span class="poster-cross">+</span>
+      </div>
+      <span class="poster-note">TURN THE WEB UP <b>↗</b></span>
+    </div>
+  </section>
+
+  <section class="arcade" id="arcade" aria-labelledby="shelf-title">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow"><span>02</span> THE SHELF</p>
+        <h2 id="shelf-title">Pick your weapon.</h2>
+      </div>
+      <p class="section-note"><b id="liveCount">0</b> game ready now<br /><b id="soonCount">0</b> in the workshop</p>
+    </div>
+
+    <div class="shelf" id="shelf" aria-label="Games"></div>
+  </section>
 </main>
+
+<footer class="site-footer">
+  <span>GRAU GAMES / BROWSER-BASED / ALWAYS FREE TO PLAY</span>
+  <span class="footer-mark">GG—<b>001</b></span>
+</footer>
 
 <script type="module" src="./main.js"></script>
 

@@ -7,36 +7,45 @@ const fine = matchMedia("(pointer: fine)").matches;
 
 function card(g, i) {
   const live = g.status === "live";
+  const featured = live && i === 0;
+  const number = String(i + 1).padStart(2, "0");
   const tags = g.tags.map(t => `<li>${t}</li>`).join("");
 
   // A live card is one big link. A "soon" card has nowhere to go, so it is an
   // inert div rather than a disabled anchor — nothing to tab onto by mistake.
   const open = live
-    ? `<a class="card" href="${g.href}" aria-label="Play ${g.title}">`
+    ? `<a class="card${featured ? " is-featured" : ""}" href="${g.href}" aria-label="Play ${g.title}">`
     : `<div class="card is-soon" aria-disabled="true">`;
   const close = live ? `</a>` : `</div>`;
 
   return `
-    <article class="slot" style="--tilt:${g.tilt}deg;--i:${i}">
+    <article class="slot${featured ? " slot--featured" : ""}" style="--tilt:${g.tilt}deg;--i:${i}">
       ${open}
-        <span class="art art--${g.slug}">
+        <div class="art art--${g.slug}">
           <svg class="art-svg" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice"
                role="img" aria-label="${g.title} cover art">${g.art}</svg>
-        </span>
-        <span class="body">
-          <span class="title-row">
+          <span class="art-index">${number} / ${live ? "LIVE" : "NEXT"}</span>
+        </div>
+        <div class="body">
+          <span class="card-kicker">${live ? "NOW PLAYING" : "ON THE WAY"}</span>
+          <div class="title-row">
             <h3>${g.title}</h3>
             <span class="badge${live ? "" : " badge-soon"}">${live ? "PLAY" : "SOON"}</span>
-          </span>
+          </div>
           <p>${g.blurb}</p>
-          <ul class="tags">${tags}</ul>
-        </span>
+          <div class="card-footer">
+            <ul class="tags">${tags}</ul>
+            <span class="launch">${live ? "ENTER GAME ↗" : "IN DEVELOPMENT"}</span>
+          </div>
+        </div>
       ${close}
     </article>`;
 }
 
 const shelf = document.getElementById("shelf");
 shelf.innerHTML = GAMES.map(card).join("");
+document.getElementById("liveCount").textContent = GAMES.filter(g => g.status === "live").length;
+document.getElementById("soonCount").textContent = GAMES.filter(g => g.status !== "live").length;
 
 /* ---------------- pointer parallax ----------------
    Each card reports where the cursor is inside it as two -1..1 numbers.
@@ -59,7 +68,7 @@ if (fine && !reduced) {
   }
 }
 
-/* ---------------- cursor blob ----------------
+/* ---------------- cursor signal ----------------
    Eased toward the pointer each frame so it trails rather than snaps.
    The loop only ever starts on a device that has a cursor to follow. */
 if (fine && !reduced) {

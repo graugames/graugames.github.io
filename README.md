@@ -86,9 +86,11 @@ everything sitting at a slight angle. Hovering a live card slides it into its ow
 shadow. Keep new additions inside that vocabulary — no gradients on chrome, no
 soft shadows, no rounded corners.
 
-The page is also deliberately bare: wordmark, then games. No tagline, no section
-heading, no marquee, no per-card source button, no footer — the games are the
-content. Resist adding chrome back.
+The page opens like an arcade poster: a compact wordmark and live shelf status,
+a short invitation into the collection, then the games themselves. Keep the
+opening composition energetic but brief; the shelf must remain one scroll (and
+one click) away. The featured live game gets the strongest visual weight, while
+unfinished games stay visibly inert and never pretend to be clickable.
 
 Every animation is disabled under `prefers-reduced-motion`, and the cursor blob
 and card parallax never even attach their listeners on a device without a

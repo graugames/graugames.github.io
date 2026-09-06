@@ -77,6 +77,30 @@ export const GAMES = [
       </g>`
   },
   {
+    slug: "graufence",
+    title: "GrauFence",
+    blurb: "Duel with a virtual blade. Your webcam tracks your stance and sword hand, or switch to keyboard controls for a fast practice round.",
+    tags: ["Pose tracking", "1v1", "Webcam"],
+    href: "https://graugames.github.io/graufence/",
+    status: "live",
+    tilt: 1.1,
+    art: `
+      <rect width="320" height="200" fill="#5b7cfa"/>
+      <g class="l-back">
+        ${bands("#4968d8", 8, 11, 18, 26)}
+        ${burst(160, 100, 112, 78, 12, 'fill="#ffd400" stroke="#000" stroke-width="5"')}
+      </g>
+      <g class="l-mid">
+        <g class="sword-a">${SWORD}</g>
+        <g class="sword-b">${SWORD}</g>
+      </g>
+      <g class="l-fg" fill="#fffdf5" stroke="#000" stroke-width="4">
+        <path d="M18 164 L112 122" stroke="#000" stroke-width="13" stroke-linecap="round"/>
+        <path d="M18 164 L112 122" stroke="#fffdf5" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="58" cy="44" r="8"/><circle cx="270" cy="158" r="10"/><circle cx="258" cy="38" r="5"/>
+      </g>`
+  },
+  {
     slug: "grau-battle",
     title: "Grau Battle",
     blurb: "In the workshop. Details land here once it is playable.",
