@@ -48,20 +48,25 @@ document.getElementById("liveCount").textContent = GAMES.filter(g => g.status ==
 document.getElementById("soonCount").textContent = GAMES.filter(g => g.status !== "live").length;
 
 /* ---------------- pointer parallax ----------------
-   Each card reports where the cursor is inside it as two -1..1 numbers.
+   Each stable slot reports where the cursor is inside it as two -1..1
+   numbers. The card can move beneath the pointer without changing the
+   coordinate frame, so hovering its edge never makes the effect oscillate.
    The art layers read those from CSS custom properties and shift by
    different amounts, so the cover art gains depth without a library and
    without a per-frame layout read. Pointer-coarse and reduced-motion
    users never get listeners attached at all. */
 if (fine && !reduced) {
-  for (const el of shelf.querySelectorAll(".card")) {
-    el.addEventListener("pointermove", e => {
-      const r = el.getBoundingClientRect();
+  for (const slot of shelf.querySelectorAll(".slot")) {
+    const el = slot.querySelector(".card");
+    if (!el) continue;
+
+    slot.addEventListener("pointermove", e => {
+      const r = slot.getBoundingClientRect();
       el.style.setProperty("--px", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
       el.style.setProperty("--py", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
     }, { passive: true });
 
-    el.addEventListener("pointerleave", () => {
+    slot.addEventListener("pointerleave", () => {
       el.style.setProperty("--px", 0);
       el.style.setProperty("--py", 0);
     }, { passive: true });

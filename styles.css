@@ -541,3 +541,28 @@ body::before,body::after{display:none}
   .site-header{padding-bottom:8px}
   .arcade{padding-top:40px}
 }
+
+/* Keep the hover target fixed while the card presses into its shadow. */
+.slot:hover .card:not(.is-soon),
+.slot:focus-within .card:not(.is-soon){
+  transform:rotate(0deg) translate(7px,7px);
+  box-shadow:var(--shadow-press);
+}
+.slot:hover .card .l-back{transform:translate(calc(var(--px) * -7px),calc(var(--py) * -7px))}
+.slot:hover .card .l-mid{transform:translate(calc(var(--px) * 15px),calc(var(--py) * 15px))}
+.slot:hover .card .l-fg{transform:translate(calc(var(--px) * 26px),calc(var(--py) * 26px))}
+.slot:hover .card .melon-a{transform:translate(80px,40px) rotate(-38deg)}
+.slot:hover .card .melon-b{transform:translate(248px,168px) rotate(162deg)}
+.slot:hover .card .sword-a{transform:translate(160px,100px) rotate(-44deg)}
+.slot:hover .card .sword-b{transform:translate(160px,100px) rotate(44deg)}
+.slot:hover .card .slash{animation:wipe .5s cubic-bezier(.3,.8,.3,1)}
+.slot:hover .card:not(.is-soon) .badge{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+
+@media (prefers-reduced-motion:reduce){
+  .slot:hover .card .l-back,.slot:hover .card .l-mid,.slot:hover .card .l-fg{transform:none}
+  .slot:hover .card .melon-a{transform:translate(96px,56px) rotate(-28deg)}
+  .slot:hover .card .melon-b{transform:translate(232px,152px) rotate(152deg)}
+  .slot:hover .card .sword-a{transform:translate(160px,100px) rotate(-36deg)}
+  .slot:hover .card .sword-b{transform:translate(160px,100px) rotate(36deg)}
+  .slot:hover .card .slash{animation:none;stroke-dashoffset:0}
+}
