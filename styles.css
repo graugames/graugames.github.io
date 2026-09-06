@@ -283,20 +283,21 @@ main{
 }
 
 /* ===============================================================
-   Experience pass — poster-led arcade composition.
+   Experience pass — calm arcade composition.
    This layer intentionally keeps the original art language and game
    interactions, but gives the shelf a stronger entrance, hierarchy and
    tactile navigation system.
    =============================================================== */
 
 :root{
-  --ink:#11100d;
-  --page:#ffd400;
-  --paper:#fffdf5;
-  --acid:#b9ff3d;
-  --coral:#ff5c39;
-  --blue:#5b7cfa;
-  --muted:#5d584d;
+  --ink:#2a2723;
+  --page:#e6dfd1;
+  --paper:#f5f0e6;
+  --accent:#b6674f;
+  --acid:var(--accent);
+  --coral:var(--accent);
+  --blue:var(--accent);
+  --muted:#6f695f;
   --shadow:10px 10px 0 var(--ink);
   --shadow-small:5px 5px 0 var(--ink);
   --shadow-press:2px 2px 0 var(--ink);
@@ -513,4 +514,30 @@ main{padding:0}
   .card:hover .sword-a{transform:translate(160px,100px) rotate(-36deg)}
   .card:hover .sword-b{transform:translate(160px,100px) rotate(36deg)}
   .slash{stroke-dashoffset:0}
+}
+
+/* Quiet palette and direct pointer pass */
+body{
+  color:var(--ink);
+  background-color:var(--page);
+  background-image:
+    linear-gradient(rgba(42,39,35,.045) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(42,39,35,.045) 2px, transparent 2px);
+}
+body::before,body::after{display:none}
+.w-2{color:var(--accent);-webkit-text-stroke:0}
+.status{padding:6px 0;border:0;background:transparent;box-shadow:none;color:var(--muted)}
+.status i{width:7px;height:7px;background:var(--accent);animation:none}
+.blob{width:12px;height:12px;border:2px solid var(--ink);background:var(--acid);box-shadow:2px 2px 0 var(--ink)}
+.blob::before,.blob::after{display:none}
+.arcade{padding-top:clamp(34px,5vw,70px)}
+.eyebrow span{background:var(--paper);color:var(--ink);border:2px solid var(--ink)}
+.section-note{border:3px solid var(--ink);background:var(--accent);box-shadow:4px 4px 0 var(--ink)}
+.badge{background:var(--acid)}
+.tags li{background:var(--page)}
+.section-head h2::after{content:"";display:inline-block;width:19px;height:19px;margin:0 0 4px 10px;background:var(--accent);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(8deg)}
+
+@media (max-width:680px){
+  .site-header{padding-bottom:8px}
+  .arcade{padding-top:40px}
 }

@@ -69,20 +69,14 @@ if (fine && !reduced) {
 }
 
 /* ---------------- cursor signal ----------------
-   Eased toward the pointer each frame so it trails rather than snaps.
-   The loop only ever starts on a device that has a cursor to follow. */
+   Keep this marker locked to the real pointer. There is no easing loop, so
+   it never trails behind the hand that is actually choosing a game. */
 if (fine && !reduced) {
   const blob = document.getElementById("blob");
-  let tx = innerWidth / 2, ty = innerHeight / 3, x = tx, y = ty;
 
-  addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
-
-  (function frame() {
-    x += (tx - x) * 0.06;
-    y += (ty - y) * 0.06;
-    blob.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(frame);
-  })();
+  addEventListener("pointermove", e => {
+    blob.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+  }, { passive: true });
 
   blob.hidden = false;
 }
