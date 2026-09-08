@@ -1,5 +1,28 @@
 import { GAMES } from "./games.js";
 
+const CTA = {
+  "pong-duel": "PONG",
+  "rope-snatch": "CUT",
+  "flappy-faceoff": "FLAP",
+  "lane-dash": "RUN",
+  "bird-brawl": "FIRE",
+  "stack-attack": "DROP",
+  "invader-duel": "SHOOT",
+  "kart-clash": "RACE",
+  "mole-mayhem": "WHACK",
+  "dot-duel": "CHOMP",
+  "doodle-drop": "CLIMB",
+  "crossy-clash": "CROSS",
+  "stack-it": "BUILD",
+  "geometry-rush": "RUSH",
+  "helix-fall": "DROP",
+  "bomber-duel": "BLAST",
+  "four-in-a-row": "DROP",
+  "brawl-shots": "BRAWL",
+  "party-mix": "PARTY",
+  "fight-night": "FIGHT",
+};
+
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fine = matchMedia("(pointer: fine)").matches;
 
@@ -10,6 +33,7 @@ function card(g, i) {
   const featured = live && i === 0;
   const number = String(i + 1).padStart(2, "0");
   const tags = g.tags.map(t => `<li>${t}</li>`).join("");
+  const cta = live ? (g.cta || CTA[g.slug] || "PLAY") : "SOON";
 
   // A live card is one big link. A "soon" card has nowhere to go, so it is an
   // inert div rather than a disabled anchor — nothing to tab onto by mistake.
@@ -30,7 +54,7 @@ function card(g, i) {
           <span class="card-kicker">${live ? "NOW PLAYING" : "ON THE WAY"}</span>
           <div class="title-row">
             <h3>${g.title}</h3>
-            <span class="badge${live ? "" : " badge-soon"}">${live ? "PLAY" : "SOON"}</span>
+            <span class="badge${live ? "" : " badge-soon"}">${cta}</span>
           </div>
           <p>${g.blurb}</p>
           <div class="card-footer">
